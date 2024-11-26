@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import "./row.css";
-import axios from '../../../Utils/axios';
+import axios from "../../../Utils/axios";
 import movieTrailer from "movie-trailer";
 import YouTube from "react-youtube";
+import { toast } from "react-toastify";
 
 const Row = ({ title, fetchUrl, isLargeRow }) => {
 	const [movies, setMovie] = useState([]);
@@ -13,9 +14,9 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				console.log(fetchUrl)
+				console.log(fetchUrl);
 				const request = await axios.get(fetchUrl);
-				console.log(request)
+				console.log(request);
 				setMovie(request.data.results);
 			} catch (error) {
 				console.log("error", error);
@@ -27,15 +28,15 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
 		if (trailerUrl) {
 			setTrailerUrl("");
 		} else {
-			movieTrailer(movie?.title || movie?.name || movie?.original_name).then(
-				(url) => {
+			movieTrailer(movie?.title || movie?.name || movie?.original_name)
+				.then((url) => {
 					console.log(url);
 					const urlParams = new URLSearchParams(new URL(url).search);
 					console.log(urlParams);
 					console.log(urlParams.get("v"));
 					setTrailerUrl(urlParams.get("v"));
-				}
-			).catch ((err) => alert ("Trailer not found"))
+				})
+				.catch((err) => toast.error("Trailer not found"));
 		}
 	};
 
@@ -70,4 +71,4 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
 	);
 };
 
-export default Row
+export default Row;
